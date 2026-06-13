@@ -39,4 +39,4 @@ El informe se evaluará bajo cuatro criterios clave, cada uno con un valor máxi
 💡 **Consejo del Mentor:** Recuerden planificar su tiempo. Cada criterio tiene el mismo peso (5 puntos), por lo que una tabla perfecta con un análisis de escenarios vacío les costará una parte importante de la nota. ¡Esfuércense en mantener el equilibrio técnico en todo el informe!
 
  📅**Fecha de entrega:** 14/06/2026 hasta las 11:59 p.m.
- 📤**Envio**: Se debe enviar por correo electrónico [Visita Google] (https://google.com)
+ 📤**Envio**: Se debe enviar por correo electrónico [Visita Google](https://github.com/elvisjsch/Estructuras_De_Datos/blob/main/Profesor/Mi_persona.md)
