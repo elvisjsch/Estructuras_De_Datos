@@ -1,67 +1,42 @@
-# 📑 Actividad Evaluativa: Reto de Optimización Backend (Módulo 1)
-
-**Asignatura:** Estructuras de Datos  
-**Metodología:** Aprendizaje Basado en Proyectos (ABP) / Análisis de Casos  
-**Ponderación:** [Insertar %]  
-**Modo de entrega:** Documento PDF o Repositorio de GitHub (Markdown)  
-
+# 📑 Actividad Evaluativa: Informe Técnico de Algoritmos de Búsqueda y Eficiencia
 ---
-
 ## 🎯 Objetivo de la Actividad
-Evaluar la capacidad del estudiante para analizar la eficiencia de un algoritmo, aplicar correctamente la Notación Big O y determinar el impacto del rendimiento en escenarios del mundo real (Mejor, Peor y Caso Promedio) antes de proceder a la codificación.
+Investigar, analizar y comparar los principales algoritmos de búsqueda utilizados en las ciencias de la computación, determinando su eficiencia temporal y espacial mediante la Notación Big O en sus diferentes escenarios (mejor, peor y caso promedio).
 
 ---
 
-## 🏢 Escenario: El Sistema de Notificaciones de "FastDelivery"
+## 📋 Estructura Requerida del Informe
 
-Trabajas como Ingeniero de Software Backend para **FastDelivery**, una aplicación de entrega de comida a domicilio que está experimentando un crecimiento masivo. El sistema cuenta con una lista de usuarios activos ($n$). 
+El informe entregado por el estudiante debe seguir estrictamente la siguiente estructura de ingeniería:
 
-El equipo de marketing ha diseñado una función para buscar usuarios específicos en la base de datos local y enviarles un cupón de descuento. El algoritmo actual realiza una **búsqueda secuencial (lineal)** en la memoria del servidor.
+### 1. Introducción
+* Breve explicación de qué es un algoritmo de búsqueda y por qué la ordenación previa de los datos es un factor crítico en la elección del algoritmo.
 
-### El Problema:
-Con 1,000 usuarios ($n = 1,000$), el sistema funciona instantáneamente. Sin embargo, la empresa se va a expandir a nivel nacional y se espera que la lista crezca a **1,000,000 de usuarios** ($n = 1,000,000$). El servidor backend actual empieza a arrojar alertas de *Timeout* (tiempo de espera agotado) debido al uso excesivo de CPU.
+### 2. Catálogo de Algoritmos de Búsqueda
+* El estudiante debe incluir: **Definición** y **Funcionamiento básico** de cada algoritmo que encuentre.
 
----
+### 3. Matriz de Eficiencia Comparativa (Tabla)
+* El núcleo del informe será una tabla comparativa donde se condense la eficiencia de todos los algoritmos analizados. El estudiante deberá completar la tabla utilizando la Notación Big O
 
-## 🛠️ Tareas a Realizar
+### 4. Caso de aplicación
+* El estudiante debe plantear un escenario donde usuaria alguno de los algoritmos de búsqueda que encuentre. Puede implementar el que desee, pero bajo la coherencia y lógica básica.
 
-Los estudiantes deberán entregar un informe técnico que resuelva los siguientes tres puntos:
-
-### Parte 1: Análisis del Algoritmo Actual (30%)
-1. Identifica y explica cuál es la **Complejidad Temporal** en Notación Big O del algoritmo de búsqueda lineal actual.
-2. Explica detalladamente qué significan los siguientes tres escenarios para **FastDelivery** con la arquitectura actual:
-   * **Mejor Caso:** Describe qué tendría que ocurrir con el usuario buscado y cuál sería su Big O.
-   * **Peor Caso:** Describe qué ocurre si el usuario no existe o es el último, y cuál sería su Big O.
-   * **Caso Promedio:** Explica el comportamiento matemático esperado en un día común de operaciones.
-
-### Parte 2: El Impacto de la Escalabilidad (30%)
-Calcula el impacto del crecimiento de los datos rellenando la siguiente tabla predictiva de operaciones (asumiendo que en el peor caso, 1 operación elemental toma 1 microsegundo $\mu s$):
-
-| Tamaño de Usuarios ($n$) | Operaciones en el Peor Caso | Tiempo Estimado (en $\mu s$ o segundos) |
-| :--- | :--- | :--- |
-| $n = 100$ | | |
-| $n = 10,000$ | | |
-| $n = 1,000,000$ | | |
-
-*A partir de los resultados, redacta una conclusión técnica de por qué el servidor está fallando ahora que la empresa se expandió.*
-
-### Parte 3: Propuesta de Solución e Impacto Espacial (40%)
-Como Ingeniero de Sistemas, debes proponer una alternativa para mejorar la velocidad de búsqueda:
-1. Si decides **ordenar la lista previamente** y aplicar un algoritmo de **Búsqueda Binaria**:
-   * ¿Cuál sería la nueva complejidad temporal en el peor de los casos? ($O(\log n)$).
-   * Justifica matemáticamente por qué esta solución salvaría al servidor del colapso con 1,000,000 de usuarios.
-2. **Análisis de Complejidad Espacial:** Si para implementar esta mejora necesitas crear un arreglo auxiliar que duplique los datos en memoria, ¿cuál sería la complejidad espacial ($O$) de tu solución? ¿Qué riesgos comerciales o técnicos implicaría esto para el backend si el dinero para infraestructura es limitado?
 
 ---
 
-## 📐 Criterios de Evaluación (Rúbrica)
+## 📐 Rúbrica de Evaluación (Total: 20 Puntos)
 
-| Criterio | Excelente (100%) | Lote Aceptable (70%) | Requiere Mejora (40%) |
-| :--- | :--- | :--- | :--- |
-| **Análisis de Complejidad (Big O)** | Identifica correctamente las complejidades temporales y espaciales usando la notación matemática adecuada ($O$). | Identifica las complejidades pero confunde los términos o confunde el peor caso con el promedio. | No identifica correctamente las complejidades de los algoritmos propuestos. |
-| **Comprensión de Casos** | Describe con precisión los escenarios del mundo real (mejor, peor, promedio) aplicados al negocio de FastDelivery. | Describe los escenarios pero de forma muy teórica, sin conectarlos con el problema del negocio. | No distingue la diferencia entre el mejor, peor y caso promedio. |
-| **Pensamiento Crítico y Solución** | Propone una solución viable, calcula correctamente el impacto de la escalabilidad y evalúa el costo de la memoria RAM. | Propone una solución pero falla en los cálculos matemáticos del crecimiento de $n$. | No propone soluciones viables o ignora el impacto de la complejidad espacial. |
-| **Presentación y Formato** | Entrega un informe técnico impecable, estructurado en Markdown/PDF, con redacción profesional y sin errores. | El informe está completo pero carece de estructura clara o tiene múltiples errores ortográficos. | Entrega un documento desorganizado que no cumple con el formato de informe técnico. |
+El informe se evaluará bajo cuatro criterios clave, cada uno con un valor máximo de 5 puntos:
+
+| Criterio | Excelente (5 pts) | Aceptable (3.5 pts) | Requiere Mejora (2 pts) | No Cumple (0 pts) |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Precisión Teórica del Catálogo** | Describe con total claridad el funcionamiento, reglas y precondiciones de los 4 algoritmos de búsqueda solicitados. | Describe los 4 algoritmos pero omite las precondiciones de ordenamiento o confunde detalles menores de su funcionamiento. | La descripción de los algoritmos es escasa, confusa o faltan algoritmos por analizar en el catálogo. | No presenta el catálogo de algoritmos o la información no corresponde al tema. |
+| **2. Exactitud de la Matriz Big O** | Completa la tabla comparativa sin errores, identificando correctamente todas las complejidades temporales y espaciales. | Completa la tabla pero comete errores menores (ej. confunde algún caso promedio o la complejidad espacial de un algoritmo). | La tabla contiene errores graves de concepto asintótico o está incompleta en más de la mitad. | No incluye la matriz comparativa o todos los datos de complejidad son erróneos. |
+| **3. Criterio de Ingeniería y Escenarios** | Resuelve los escenarios prácticos demostrando un excelente balance técnico entre el costo de ordenar datos y el costo de buscar. | Resuelve los escenarios pero su justificación técnica es débil o ignora el impacto de la complejidad espacial en la memoria. | Las respuestas a los escenarios carecen de fundamento técnico, lógica algorítmica o están incompletas. | No responde a los escenarios de aplicación práctica planteados. |
+| **4. Estructura, Formato y Redacción** | El informe se presenta en un formato PDF impecable, limpio, estructurado correctamente con títulos, tablas legibles y sin faltas. | El informe cuenta con la estructura solicitada, pero la presentación visual es descuidada o presenta múltiples errores ortográficos. | El documento es una pared de texto desorganizada, difícil de leer y no cumple con el estándar de un informe técnico. | El formato entregado no es legible o no cumple en absoluto con los requisitos mínimos de entrega. |
 
 ---
-💡 **Consejo del Mentor:** Recuerden que en producción no optimizamos para que el código "se vea bonito", optimizamos para que la infraestructura soporte la carga del negocio. ¡Mucho éxito con el reto!
+💡 **Consejo del Mentor:** Recuerden planificar su tiempo. Cada criterio tiene el mismo peso (5 puntos), por lo que una tabla perfecta con un análisis de escenarios vacío les costará una parte importante de la nota. ¡Esfuércense en mantener el equilibrio técnico en todo el informe!
+
+ 📅**Fecha de entrega:** 14/06/2026 hasta las 11:59 p.m.
+ 📤**Envio**: Se debe enviar por correo electrónico [Visita Google] (https://google.com)
