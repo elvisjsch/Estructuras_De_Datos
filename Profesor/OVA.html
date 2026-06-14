@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OVA: Estructuras de Datos Básicas</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --surface-color: #1e293b;
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+            --accent: #34d399;
+            --danger: #f87171;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --node-size: 50px;
+            --anim-speed: 0.4s;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-color); color: var(--text); overflow-x: hidden; }
+
+        nav {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px); z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 1rem; display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap;
+        }
+        nav a { color: var(--text-muted); text-decoration: none; font-weight: 600; padding: 0.5rem 1rem; border-radius: 20px; transition: all 0.3s ease; }
+        nav a:hover, nav a.active { background: var(--primary); color: var(--bg-color); }
+
+        section { height: 100vh; width: 100%; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px 20px; }
+        h2 { font-size: 2.5rem; margin-bottom: 0.5rem; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p.desc { color: var(--text-muted); margin-bottom: 2rem; text-align: center; max-width: 600px; }
+        .controls { display: flex; gap: 1rem; margin-bottom: 2rem; align-items: center; }
+        button { background: var(--surface-color); color: var(--text); border: 1px solid var(--primary); padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; }
+        button:hover { background: var(--primary); color: var(--bg-color); transform: translateY(-2px); }
+        button.danger { border-color: var(--danger); }
+        button.danger:hover { background: var(--danger); }
+
+        /* Input personalizado para el índice */
+        .index-input {
+            width: 70px;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            background: var(--surface-color);
+            color: var(--text);
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .index-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.3);
+        }
+
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-50px); } }
+        @keyframes dropIn { from { opacity: 0; transform: translateY(-50px) scale(0.8); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes popOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-50px) scale(0.8); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); } 50% { transform: scale(1.1); box-shadow: 0 0 0 12px rgba(52, 211, 153, 0); } }
+
+        .enter-right { animation: slideInRight var(--anim-speed) forwards; }
+        .exit-left { animation: slideOutLeft var(--anim-speed) forwards; }
+        .enter-drop { animation: dropIn var(--anim-speed) forwards; }
+        .exit-pop { animation: popOut var(--anim-speed) forwards; }
+        .highlight { animation: pulse 1s infinite; background: var(--accent) !important; color: var(--bg-color) !important; }
+
+        .array-container { display: flex; gap: 5px; background: var(--surface-color); padding: 20px; border-radius: 12px; border: 2px dashed var(--text-muted); }
+        .array-item { width: var(--node-size); height: var(--node-size); background: var(--secondary); display: flex; align-items: center; justify-content: center; border-radius: 6px; font-weight: bold; transition: all 0.3s ease; position: relative; }
+        .array-item::after {
+            position: absolute;
+            bottom: -25px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        .stack-container { width: 60px; height: 300px; background: var(--surface-color); border: 3px solid var(--primary); border-top: none; border-radius: 0 0 10px 10px; display: flex; flex-direction: column-reverse; align-items: center; padding: 5px; gap: 5px; position: relative; }
+        .stack-container::before { content: 'LIFO'; position: absolute; top: -30px; color: var(--primary); font-weight: bold; }
+        .stack-item { width: 100%; height: 40px; background: var(--primary); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--bg-color); }
+
+        .queue-container { height: 60px; min-width: 300px; background: var(--surface-color); border: 3px solid var(--accent); border-left: none; border-radius: 0 10px 10px 0; display: flex; align-items: center; padding: 5px; gap: 5px; position: relative; }
+        .queue-container::before { content: 'FIFO'; position: absolute; left: -50px; color: var(--accent); font-weight: bold; }
+        .queue-item { min-width: 40px; height: 40px; background: var(--accent); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--bg-color); }
+
+        .list-container { display: flex; align-items: center; gap: 0; flex-wrap: wrap; justify-content: center; }
+        .list-node { display: flex; align-items: center; }
+        .list-data { width: var(--node-size); height: var(--node-size); background: var(--secondary); border-radius: 8px 0 0 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .list-pointer { width: 30px; height: var(--node-size); background: #475569; border-radius: 0 8px 8px 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; }
+        .list-null { color: var(--danger); font-weight: bold; margin-left: 5px; display: flex; align-items: center; height: var(--node-size); }
+
+        .tree-container { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+        .tree-level { display: flex; gap: 40px; position: relative; }
+        .tree-node { width: var(--node-size); height: var(--node-size); background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--bg-color); position: relative; z-index: 2; transition: all 0.3s; }
+        .tree-node::after { content: ''; position: absolute; top: 100%; left: 50%; width: 2px; height: 40px; background: var(--text-muted); z-index: 1; }
+        .tree-level:last-child .tree-node::after { display: none; }
+
+        .graph-container { width: 440px; height: 280px; position: relative; background: var(--surface-color); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        .graph-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .graph-svg line { stroke: var(--text-muted); stroke-width: 3; transition: all 0.4s ease; }
+        .graph-svg text { fill: var(--text); font-size: 12px; font-weight: bold; user-select: none; pointer-events: none; }
+        .graph-svg .weight-label { fill: #cbd5e1; font-weight: 700; font-size: 13px; }
+        .graph-svg line.active-path { stroke: var(--accent); stroke-width: 5; filter: drop-shadow(0 0 6px var(--accent)); }
+        .graph-node { position: absolute; width: var(--node-size); height: var(--node-size); background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 2; transform: translate(-50%, -50%); transition: background-color 0.4s ease, box-shadow 0.4s ease, color 0.4s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+        .graph-node.path-active { background: var(--accent) !important; color: var(--bg-color) !important; box-shadow: 0 0 15px 6px rgba(52, 211, 153, 0.6); }
+        
+        @media (max-width: 600px) { 
+            h2 { font-size: 1.8rem; } 
+            .graph-container { width: 320px; height: 200px; } 
+            .graph-node { width: 40px; height: 40px; font-size: 0.8rem; } 
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#array">Array</a>
+        <a href="#pila">Pila</a>
+        <a href="#cola">Cola</a>
+        <a href="#lista">Lista</a>
+        <a href="#arbol">Árbol</a>
+        <a href="#grafo">Grafo</a>
+    </nav>
+
+    <section id="array">
+        <h2>Array (Arreglo)</h2>
+        <p class="desc">Colección de elementos identificados por un índice numérico. El acceso es directo y rápido (O(1)).</p>
+        <div class="controls">
+            <input type="number" id="arrayIndexInput" class="index-input" min="0" max="4" value="2" placeholder="0-4">
+            <button onclick="modificarArray()">Resaltar Índice</button>
+        </div>
+        <div class="array-container" id="arrayVisual">
+            <div class="array-item" data-index="0">10</div>
+            <div class="array-item" data-index="1">25</div>
+            <div class="array-item" data-index="2">42</div>
+            <div class="array-item" data-index="3">8</div>
+            <div class="array-item" data-index="4">99</div>
+        </div>
+    </section>
+
+    <section id="pila">
+        <h2>Pila (Stack)</h2>
+        <p class="desc">Estructura LIFO (Last In, First Out). El último en entrar es el primero en salir.</p>
+        <div class="controls"><button onclick="pushStack()">Push (Agregar)</button><button class="danger" onclick="popStack()">Pop (Sacar)</button></div>
+        <div class="stack-container" id="stackVisual">
+            <div class="stack-item enter-drop">1</div><div class="stack-item enter-drop">2</div>
+        </div>
+    </section>
+
+    <section id="cola">
+        <h2>Cola (Queue)</h2>
+        <p class="desc">Estructura FIFO (First In, First Out). El primero en llegar es el primero en ser atendido.</p>
+        <div class="controls"><button onclick="enqueue()">Encolar</button><button class="danger" onclick="dequeue()">Desencolar</button></div>
+        <div class="queue-container" id="queueVisual">
+            <div class="queue-item enter-right">A</div><div class="queue-item enter-right">B</div>
+        </div>
+    </section>
+
+    <section id="lista">
+        <h2>Lista Enlazada</h2>
+        <p class="desc">Nodos que contienen datos y un puntero al siguiente. No requiere memoria contigua.</p>
+        <div class="controls">
+            <button onclick="agregarNodoLista()">Insertar al Final</button>
+            <button class="danger" onclick="eliminarNodoLista()">Eliminar Último</button>
+        </div>
+        <div class="list-container" id="listVisual">
+            <div class="list-node enter-right"><div class="list-data">10</div><div class="list-pointer">→</div></div>
+            <div class="list-node enter-right"><div class="list-data">20</div><div class="list-pointer">→</div></div>
+            <span class="list-null">NULL</span>
+        </div>
+    </section>
+
+    <section id="arbol">
+        <h2>Árbol Binario</h2>
+        <p class="desc">Estructura jerárquica con un nodo raíz y subárboles hijos.</p>
+        <div class="controls"><button onclick="resaltarArbol()">Simular Búsqueda (DFS)</button></div>
+        <div class="tree-container" id="treeVisual">
+            <div class="tree-level"><div class="tree-node" id="rootNode">8</div></div>
+            <div class="tree-level"><div class="tree-node" id="leftNode">3</div><div class="tree-node" id="rightNode">10</div></div>
+            <div class="tree-level"><div class="tree-node" id="leafNode">1</div></div>
+        </div>
+    </section>
+
+    <section id="grafo">
+        <h2>Grafo Ponderado</h2>
+        <p class="desc">Nodos conectados por aristas con pesos. Visualiza el <strong>camino más corto</strong> desde A hasta G.</p>
+        <div class="controls"><button onclick="buscarCaminoCorto()">Hallar Camino Más Corto (A→G)</button></div>
+        <div class="graph-container" id="graphVisual">
+            <svg class="graph-svg" viewBox="0 0 440 280" preserveAspectRatio="xMidYMid meet">
+                <line id="e_ab" x1="60" y1="140" x2="140" y2="60" /><text class="weight-label" x="90" y="92">3</text>
+                <line id="e_ad" x1="60" y1="140" x2="140" y2="220" /><text class="weight-label" x="90" y="192">7</text>
+                <line id="e_bc" x1="140" y1="60" x2="220" y2="60" /><text class="weight-label" x="175" y="50">2</text>
+                <line id="e_be" x1="140" y1="60" x2="260" y2="140" /><text class="weight-label" x="185" y="95">8</text>
+                <line id="e_ce" x1="220" y1="60" x2="260" y2="140" /><text class="weight-label" x="235" y="95">4</text>
+                <line id="e_cf" x1="220" y1="60" x2="340" y2="60" /><text class="weight-label" x="275" y="50">2</text>
+                <line id="e_de" x1="140" y1="220" x2="260" y2="140" /><text class="weight-label" x="190" y="192">4</text>
+                <line id="e_eg" x1="260" y1="140" x2="360" y2="220" /><text class="weight-label" x="315" y="192">5</text>
+                <line id="e_fg" x1="340" y1="60" x2="360" y2="220" /><text class="weight-label" x="345" y="145">3</text>
+            </svg>
+            <div class="graph-node" id="gn_a" style="left: 60px; top: 140px;">A</div>
+            <div class="graph-node" id="gn_b" style="left: 140px; top: 60px;">B</div>
+            <div class="graph-node" id="gn_c" style="left: 220px; top: 60px;">C</div>
+            <div class="graph-node" id="gn_d" style="left: 140px; top: 220px;">D</div>
+            <div class="graph-node" id="gn_e" style="left: 260px; top: 140px;">E</div>
+            <div class="graph-node" id="gn_f" style="left: 340px; top: 60px;">F</div>
+            <div class="graph-node" id="gn_g" style="left: 360px; top: 220px;">G</div>
+        </div>
+    </section>
+
+    <script>
+        let stackCount = 2, queueCount = 2, listCount = 20;
+
+        function animateAndRemove(el, exitClass) {
+            if (!el) return;
+            el.classList.add(exitClass);
+            el.addEventListener('animationend', () => el.remove(), { once: true });
+        }
+
+        // ✅ ARRAY: Selección dinámica de índice
+        function modificarArray() {
+            // 1. Limpiar cualquier resaltado previo
+            document.querySelectorAll('.array-item').forEach(item => item.classList.remove('highlight'));
+            
+            // 2. Obtener el valor del input
+            const input = document.getElementById('arrayIndexInput');
+            const index = parseInt(input.value, 10);
+            const items = document.querySelectorAll('.array-item');
+            
+            // 3. Validar y resaltar
+            if (!isNaN(index) && index >= 0 && index < items.length) {
+                const target = items[index];
+                target.classList.add('highlight');
+            } else {
+                alert(`⚠️ Índice fuera de rango.\nPor favor, ingresa un valor entre 0 y ${items.length - 1}`);
+                input.value = ""; // Limpiar input inválido
+                input.focus();
+            }
+        }
+
+        function pushStack() {
+            if (stackCount >= 6) return; stackCount++;
+            const c = document.getElementById('stackVisual'), item = document.createElement('div');
+            item.className = 'stack-item enter-drop'; item.textContent = stackCount;
+            c.appendChild(item);
+        }
+        function popStack() {
+            const c = document.getElementById('stackVisual'), items = c.querySelectorAll('.stack-item');
+            if (items.length > 0) { animateAndRemove(items[items.length - 1], 'exit-pop'); stackCount--; }
+        }
+
+        function enqueue() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const c = document.getElementById('queueVisual'), item = document.createElement('div');
+            item.className = 'queue-item enter-right'; item.textContent = letters[queueCount++ % 26];
+            c.appendChild(item);
+        }
+        function dequeue() {
+            const c = document.getElementById('queueVisual'), items = c.querySelectorAll('.queue-item');
+            if (items.length > 0) animateAndRemove(items[0], 'exit-left');
+        }
+
+        function agregarNodoLista() {
+            listCount += 10;
+            const c = document.getElementById('listVisual'), nullSpan = c.querySelector('.list-null');
+            const n = document.createElement('div'); n.className = 'list-node enter-right';
+            n.innerHTML = `<div class="list-data">${listCount}</div><div class="list-pointer">→</div>`;
+            c.insertBefore(n, nullSpan);
+        }
+
+        function eliminarNodoLista() {
+            const c = document.getElementById('listVisual');
+            const nodes = c.querySelectorAll('.list-node');
+            if (nodes.length > 0) {
+                const lastNode = nodes[nodes.length - 1];
+                animateAndRemove(lastNode, 'exit-left');
+                listCount -= 10;
+            }
+        }
+
+        function resaltarArbol() {
+            const seq = ['rootNode', 'leftNode', 'leafNode', 'rightNode'];
+            seq.forEach((id, i) => setTimeout(() => {
+                const n = document.getElementById(id); n.classList.add('highlight');
+                setTimeout(() => n.classList.remove('highlight'), 800);
+            }, i * 600));
+        }
+
+        function buscarCaminoCorto() {
+            document.querySelectorAll('.graph-node').forEach(n => n.classList.remove('path-active'));
+            document.querySelectorAll('.graph-svg line').forEach(l => l.classList.remove('active-path'));
+
+            const shortestPath = [
+                { node: 'gn_a' },
+                { node: 'gn_b', edge: 'e_ab' },
+                { node: 'gn_c', edge: 'e_bc' },
+                { node: 'gn_f', edge: 'e_cf' },
+                { node: 'gn_g', edge: 'e_fg' }
+            ];
+
+            shortestPath.forEach((step, i) => {
+                setTimeout(() => {
+                    const nodeEl = document.getElementById(step.node);
+                    if (nodeEl) nodeEl.classList.add('path-active');
+                    const edgeEl = document.getElementById(step.edge);
+                    if (edgeEl) edgeEl.classList.add('active-path');
+                }, i * 600);
+            });
+        }
+
+        const sections = document.querySelectorAll('section');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+            document.querySelectorAll('nav a').forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href').includes(current));
+            });
+        });
+    </script>
+</body>
+</html>
