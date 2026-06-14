@@ -1,7 +1,7 @@
 # 📑 Actividad Evaluativa 2: Caso de Estudio y Simulación de Estructuras Lineales
 
 **Asignatura:** Estructuras de Datos  
-**Ponderación:** [Insertar %]  
+**Ponderación:** [Insertar 15%]  
 **Tipo de Entrega:** Informe Técnico + Archivo de Código Fuente  
 **Modo:** [Individual / Parejas]  
 
@@ -9,19 +9,6 @@
 
 ## 🎯 Objetivo de la Actividad
 Aplicar los conceptos de estructuras de datos lineales (Arreglos, Listas Enlazadas, Pilas o Colas) en la resolución de un problema del mundo real, justificando la elección de la estructura mediante el análisis de sus ventajas computacionales y simulando su comportamiento a través de código funcional.
-
----
-
-## 📋 Instrucciones del Reto
-
-Para esta actividad, no se te dará una estructura fija. Deberás seleccionar **UNO** de los siguientes escenarios de backend, analizarlo y desarrollar la solución requerida:
-
-### Escenarios Disponibles (Selecciona solo uno):
-* **Escenario A (Gestión de Tráfico Web):** Diseñar el backend para un servidor que procesa peticiones de usuarios hacia una base de datos. Si el servidor se satura, las peticiones deben esperar su turno en orden de llegada.
-* **Escenario B (Módulo "Deshacer" - Undo):** Diseñar el editor de texto o módulo de edición de un sistema administrativo donde cada acción o cambio realizado por el usuario pueda revertirse cronológicamente (desde el más reciente al más antiguo).
-* **Escenario C (Historial Dinámico de Sesiones):** Diseñar un sistema que almacene el historial de navegación de un usuario en una aplicación de escritorio, permitiendo insertar nuevos registros de forma ilimitada sin reservar un tamaño fijo de memoria de antemano.
-
----
 
 ## 🛠️ Requisitos del Entregable
 
