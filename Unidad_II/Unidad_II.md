@@ -240,6 +240,6 @@ print(cola.desencolar())      # Salida: Cliente B
 | **Pila (Stack)** | Revertir acciones, recursión, análisis sintáctico (parsing), DFS. | Necesitas acceder a elementos que no estén en la cima. |
 | **Cola (Queue)** | Manejo de tareas en orden de llegada, buffers, BFS. | Necesitas priorizar elementos (para eso existe la *Cola de Prioridad* / Heap, que veremos en el Módulo 3). |
 
-> 💡 **Consejo para desarrolladores**: En Python, la `list` nativa es increíblemente optimizada para actuar como Pila (`append` y `pop`). Sin embargo, **nunca** uses `list.pop(0)` o `list.insert(0, item)` para simular una Cola en código de producción, ya que degrada el rendimiento a $O(n)$. Usa siempre `collections.deque`.
+> 💡 **Consejo para desarrolladores**: En Python, la `list` nativa es increíblemente optimizada para actuar como Pila (`append` y `pop`). Sin embargo, **nunca** uses `list.pop(0)` o `list.insert(0, item)` para simular una Cola en código de producción, ya que degrada el rendimiento a $O(n)$. Usa siempre `collections.deque`.Además les dejo una herramientas para puedan ver de manera visual el comportamiento de las [estructuras de datos](https://ova-gamma.vercel.app/).
 
 ---
